@@ -1,0 +1,25 @@
+#have change mysql-image:v2.0 need delete db direction
+#depends_on: - db , the first time run not ok
+version: "3.7"
+services:
+   db:
+     image: ap0406708/mysql-image:v2.0
+     ports:
+       - "3306:3306"
+     volumes:
+       - ./db:/var/lib/mysql
+     environment:
+       - MYSQL_DATABASE=soccergame
+       - MYSQL_ROOT_PASSWORD=12345678@Qq
+   
+   web:
+     build: .
+     container_name: soccergame
+     command: python3 ./soccerweb/manage.py runserver 0.0.0.0:8000
+     volumes:
+       - .:/code
+     ports:
+       - "8000:8000"
+     #depends_on:
+     links:
+       - db
